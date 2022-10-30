@@ -16,6 +16,8 @@ using Windows.Foundation;
 using Windows.Foundation.Collections;
 using Windows.UI.Input;
 using System.Data.SQLite;
+using System.Collections.ObjectModel;
+using System.Diagnostics.Metrics;
 
 
 // To learn more about WinUI, the WinUI project structure,
@@ -28,18 +30,20 @@ namespace App1
     /// </summary>
     public sealed partial class MainWindow : Window
     {
-        
-      
+        public ObservableCollection<DischargeDetails> Discharges
+        {
+            get; set;
+        } = new();
+
+        List<Counts> counters;
+
         public MainWindow()
         {
             this.InitializeComponent();
-        
+            DBconnect();
+           
         }
 
-        public static String GetTimestamp(DateTime value)
-        {
-            return value.ToString("yyyyMMddHHmmssffff");
-        }
         static SQLiteConnection conn = new SQLiteConnection();
         static SQLiteCommand comm = new SQLiteCommand();
         public static void DBconnect()
@@ -54,29 +58,21 @@ namespace App1
         }
         public void myButton_Click(object sender, RoutedEventArgs e)
         {
-            DBconnect();
-            string stm = "Select * from BatteryUsage limit 5";
-            comm = new SQLiteCommand(stm, conn);
-            SQLiteDataReader reader = comm.ExecuteReader();
+            Discharges.Clear();
+            myButton.Content = "Refresh";
+            table.Visibility = Visibility.Visible;
+            SpotCount.Visibility = Visibility.Visible;
+            OptimalCount.Visibility = Visibility.Visible;
+            BadCount.Visibility = Visibility.Visible;
+            List<DischargeDetails> discharges = Cook.Discharge();
 
-            myButton.Opacity=0;
-            textblock1.Text = "";
+            counters = Cook.Counts();
 
-            while (reader.Read())
-            {
-                textblock1.Text += reader.GetDouble(1).ToString() + "\n";
-                textblock1.Text += reader.GetString(3)+"\n";
-                textblock1.Text += reader.GetString(2)+"\n";
-
-            }
-           
-
-
-
-
-
-
-
+            foreach (var discharge in discharges)
+                Discharges.Add(discharge);
+            SpotCount.Text = "Spot Count : " + counters[0].SpotCount;
+            BadCount.Text = "Bad Count  : " + counters[0].BadCount;
+            OptimalCount.Text = "Optimal Count : " + counters[0].OptimalCount;
 
         }
     }

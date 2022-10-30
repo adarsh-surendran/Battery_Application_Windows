@@ -13,6 +13,7 @@ namespace WorkerService1
             _logger = logger;
         }
         static DateTime dateTime;
+        //
         static SQLiteConnection conn = new SQLiteConnection();
         static SQLiteCommand comm = new SQLiteCommand();
         public static void DBdesign()

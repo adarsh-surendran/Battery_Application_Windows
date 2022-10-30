@@ -5,11 +5,45 @@
     xmlns:local="using:App1"
     xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
     xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+    xmlns:controls="using:CommunityToolkit.WinUI.UI.Controls"
+    
     mc:Ignorable="d">
 
-    <StackPanel Orientation="Horizontal" HorizontalAlignment="Center" VerticalAlignment="Center">
-        <Button x:Name="myButton" Click="myButton_Click">Click Me</Button>
-      
-        <TextBlock x:Name="textblock1"> </TextBlock>
-    </StackPanel>
+
+
+
+   
+
+
+        <Grid >
+        
+
+        <Grid.RowDefinitions>
+            <RowDefinition Height="Auto"/>
+            <RowDefinition Height="Auto" />
+            <RowDefinition Height="Auto" />
+
+
+            <RowDefinition Height="Auto" />
+            <RowDefinition Height="*"/>
+        </Grid.RowDefinitions>
+        <Button
+                Name="myButton"
+                Grid.Row="0"
+                Margin="60,30"
+            
+                Content="Get Battery Usage Statistics"
+                Click="myButton_Click"
+            Visibility="Visible"/>
+
+
+
+        <TextBlock Margin="60,10" Visibility="Collapsed" Name="SpotCount"  Grid.Row="1" >Spot Count :</TextBlock>
+        <TextBlock Margin="60,10" Visibility="Collapsed" Name="BadCount"  Grid.Row="2" > Bad Count :</TextBlock>
+        <TextBlock Margin="60,10" Visibility="Collapsed" Name="OptimalCount" Grid.Row="3" > Optimal Count :</TextBlock>
+
+        <controls:DataGrid x:Name="table" Margin="60,10" Visibility="Collapsed" Grid.Row="4" ItemsSource="{x:Bind Discharges}"/>
+    </Grid>
+       
+
 </Window>
